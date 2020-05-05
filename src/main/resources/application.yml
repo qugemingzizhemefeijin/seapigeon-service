@@ -1,0 +1,62 @@
+server:
+  port: 8002
+mybatis-plus: 
+  mapper-locations: classpath:mapper/*Mapper.xml
+  global-config:
+    db-config:
+      field-strategy: not-empty
+      id-type: auto
+      db-type: mysql
+    banner: false
+    super-mapper-class: com.tigerjoys.seapigeon.framework.mapper.BaseMapper
+  type-enums-package: com.tigerjoys.seapigeon.common.enums
+  type-aliases-package: com.tigerjoys.seapigeon.inter.entity,com.tigerjoys.seapigeon.model.dto
+
+spring:
+  application:
+    name: cloud-payment-service
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/db2019?useUnicode=true&characterEncoding=utf-8&useSSL=false
+      username: root
+      password: abcd1234
+      initialSize: 5  # 初始连接数
+      minIdle: 5  # 最小连接池数量
+      maxActive: 20 # 最大连接池数量
+      maxWait: 3000 # 配置获取连接等待超时的时间
+      timeBetweenEvictionRunsMillis: 60000  # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      minEvictableIdleTimeMillis: 300000  # 配置一个连接在池中最小生存的时间，单位是毫秒
+      maxEvictableIdleTimeMillis: 1800000 # 配置一个连接在池中最大生存的时间，单位是毫秒
+      validationQuery: SELECT 1 FROM DUAL # 配置检测连接是否有效
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      web-stat-filter:
+        enabled: true
+        url-pattern: /monitor/webstat/*
+      statViewServlet:
+        enabled: true
+        url-pattern: /monitor/druid/*
+      filter:
+        stat:
+          # 慢SQL记录
+          log-slow-sql: true
+          slow-sql-millis: 500
+          merge-sql: true
+        wall:
+          config:
+            multi-statement-allow: true
+            
+#日志
+logging:
+  config: classpath:logback-spring.xml
+  level:
+    java.sql.Connection: DEBUG
+    java.sql.Statement: DEBUG
+    java.sql.PreparedStatement: DEBUG
+    org.springframework.jdbc.datasource.DataSourceTransactionManager: DEBUG
+    
